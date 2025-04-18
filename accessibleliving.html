@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Accessible Living UAE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* High Contrast Mode */
+        .high-contrast {
+            background-color: black;
+            color: white;
+        }
+
+        header {
+            background: #333;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        nav {
+            background: #444;
+            padding: 0.5rem;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .toggle-btn {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #333;
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .text-size {
+            font-size: 1rem;
+        }
+
+        .increase-text-size {
+            font-size: 1.2rem;
+        }
+
+        .decrease-text-size {
+            font-size: 0.8rem;
+        }
+
+        /* For mobile screen readers */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        .clickable-text {
+            color: #0066cc;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Skip Navigation Link for Screen Readers -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header>
+        <h1>Accessible Living UAE</h1>
+        <button class="toggle-btn" id="contrastToggle" aria-label="Toggle high contrast mode">Toggle High Contrast</button>
+        <button class="toggle-btn" id="increaseTextSize" aria-label="Increase text size">Increase Text Size</button>
+        <button class="toggle-btn" id="decreaseTextSize" aria-label="Decrease text size">Decrease Text Size</button>
+        <button class="toggle-btn" id="startTextToSpeech" aria-label="Start reading text">Start Text-to-Speech</button>
+        <button class="toggle-btn" id="stopTextToSpeech" aria-label="Stop reading text">Stop Text-to-Speech</button>
+    </header>
+
+    <nav>
+        <a href="#home" role="link" aria-label="Navigate to Home">Home</a>
+        <a href="#services" role="link" aria-label="Navigate to Services">Services</a>
+        <a href="#news" role="link" aria-label="Navigate to News">News</a>
+        <a href="#contact" role="link" aria-label="Navigate to Contact">Contact</a>
+    </nav>
+
+    <div class="main-content" id="main-content">
+        <section id="home">
+            <h2>Welcome</h2>
+            <p>Welcome to <span class="clickable-text" onclick="speakText('Accessible Living UAE is designed to assist the visually impaired with easy-to-use tools and services.')">Accessible Living UAE</span>, where we prioritize accessibility and provide resources and services tailored for visually impaired individuals. Explore our features and feel free to reach out for support.</p>
+        </section>
+
+        <section id="services">
+            <h2>Services</h2>
+            <p><span class="clickable-text" onclick="speakText('We offer various assistive technologies such as screen readers, braille displays, and audio guides to improve daily life for the visually impaired.')">Our services</span> include assistive technologies, public services, and more. We aim to make life more accessible for all visually impaired people in the UAE.</p>
+        </section>
+
+        <section id="news">
+            <h2>Latest News</h2>
+            <p><span class="clickable-text" onclick="speakText('Stay updated with the latest news on accessibility, assistive technologies, and events in the UAE.')">Stay updated</span> with the latest news related to accessibility and visually impaired resources.</p>
+        </section>
+
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>If you have any questions or need assistance, please <span class="clickable-text" onclick="speakText('Feel free to contact us at any time via our form below.')">contact us</span> using the form below. We are here to help!</p>
+            <form>
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name" aria-label="Enter your name"><br><br>
+
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" aria-label="Enter your email"><br><br>
+
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="4" cols="50" aria-label="Enter your message"></textarea><br><br>
+
+                <input type="submit" value="Submit" aria-label="Submit your message">
+            </form>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Accessible Living UAE</p>
+    </footer>
+
+    <script>
+        let currentSpeech = null;
+
+        // Toggle High Contrast Mode
+        document.getElementById('contrastToggle').addEventListener('click', function() {
+            document.body.classList.toggle('high-contrast');
+        });
+
+        // Increase Text Size
+        document.getElementById('increaseTextSize').addEventListener('click', function() {
+            document.body.classList.add('increase-text-size');
+            document.body.classList.remove('decrease-text-size');
+        });
+
+        // Decrease Text Size
+        document.getElementById('decreaseTextSize').addEventListener('click', function() {
+            document.body.classList.add('decrease-text-size');
+            document.body.classList.remove('increase-text-size');
+        });
+
+        // Start Text-to-Speech
+        document.getElementById('startTextToSpeech').addEventListener('click', function() {
+            let speech = new SpeechSynthesisUtterance();
+            speech.text = document.body.innerText; // Read all text in the body
+            speech.lang = 'en-US';
+            currentSpeech = speech;
+            window.speechSynthesis.speak(speech);
+        });
+
+        // Stop Text-to-Speech
+        document.getElementById('stopTextToSpeech').addEventListener('click', function() {
+            if (currentSpeech) {
+                window.speechSynthesis.cancel(); // Stop current speech
+                currentSpeech = null;
+            }
+        });
+
+        // Function for click-to-read text
+        function speakText(text) {
+            let speech = new SpeechSynthesisUtterance(text);
+            speech.lang = 'en-US';
+            window.speechSynthesis.speak(speech);
+            currentSpeech = speech;
+        }
+
+        // Voice Command Navigation (Using Web Speech API)
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+
+        recognition.onstart = function() {
+            console.log('Voice command activated');
+        };
+
+        recognition.onresult = function(event) {
+            const command = event.results[0][0].transcript.toLowerCase();
+            if (command.includes('home')) {
+                window.location.hash = '#home';
+            } else if (command.includes('services')) {
+                window.location.hash = '#services';
+            } else if (command.includes('news')) {
+                window.location.hash = '#news';
+            } else if (command.includes('contact')) {
+                window.location.hash = '#contact';
+            }
+        };
+
+        document.getElementById('startVoiceCommand').addEventListener('click', function() {
+            recognition.start();
+        });
+    </script>
+
+</body>
+</html>
